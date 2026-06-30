@@ -258,7 +258,7 @@ console.log(
 "Rocket League Freestyle Team"
 );
 
-const applicationApiUrl = "submit_application.php";
+const applicationApiUrl = "https://script.google.com/macros/s/AKfycbwprZ6GZRA9_myaTsdh3kCqCVFiOiaEdRgiIxKStq1gXEqlBzmKJYF97zzZJUibBhFrDg/exec";
 
 function getPlayerFormElements(){
 
@@ -319,80 +319,59 @@ function syncPlayerMode(type){
 
 async function submitApplicationForm(event){
 
+   async function submitApplicationForm(event){
+
     event.preventDefault();
 
     const form = event.currentTarget;
     const submitButton = form.querySelector('button[type="submit"]');
 
     if(submitButton){
-
         submitButton.disabled = true;
-
     }
 
     try{
 
         const formData = new FormData(form);
-        const payload = Object.fromEntries(formData.entries());
 
-        const response = await fetch(applicationApiUrl, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
+        const response = await fetch(applicationApiUrl,{
+            method:"POST",
+            body:formData
         });
 
         const result = await response.json();
 
-        if(!response.ok){
+        if(result.success){
 
-            throw new Error(result.error || "تعذر حفظ الطلب");
+            alert("تم إرسال الطلب بنجاح ✅");
 
-        }
+            form.reset();
 
-        form.reset();
-
-        if(form.id === "player-form"){
-
-            const freestyleButton = document.querySelector('.freestyle-btn[data-freestyle-type="no_flipper"]');
-            const playerButtons = document.querySelectorAll('.player-type-btn');
-            const freestyleButtons = document.querySelectorAll('.freestyle-btn');
-
-            playerButtons.forEach(btn => btn.classList.remove("active"));
-            freestyleButtons.forEach(btn => btn.classList.remove("active"));
-
-            if(playerButtons[0]){
-
-                playerButtons[0].classList.add("active");
-
+            if(form.id==="player-form"){
+                syncPlayerMode("freestyle");
             }
 
-            if(freestyleButton){
+        }else{
 
-                freestyleButton.classList.add("active");
-
-            }
-
-            syncPlayerMode("freestyle");
+            alert(result.error || "حدث خطأ");
 
         }
-
-        window.alert("تم إرسال الطلب بنجاح");
 
     }catch(error){
 
-        window.alert(error.message || "حدث خطأ أثناء إرسال الطلب");
+        console.error(error);
+
+        alert("تعذر الاتصال بالخادم");
 
     }finally{
 
         if(submitButton){
-
-            submitButton.disabled = false;
-
+            submitButton.disabled=false;
         }
 
     }
+
+}
 
 }
 

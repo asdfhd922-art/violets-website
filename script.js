@@ -409,9 +409,15 @@ function showForm(event, type){
 
     document.querySelectorAll(".application-form").forEach(form => {
 
-        form.addEventListener("submit", submitApplicationForm);
+    form.onsubmit = function(event){
 
-    });
+        alert("JavaScript يعمل");
+
+        event.preventDefault();
+
+    };
+
+});
 
     const playerForm =
     document.getElementById("player-form");

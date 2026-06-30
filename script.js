@@ -319,8 +319,6 @@ function syncPlayerMode(type){
 
 async function submitApplicationForm(event){
 
-   async function submitApplicationForm(event){
-
     event.preventDefault();
 
     const form = event.currentTarget;
@@ -339,7 +337,11 @@ async function submitApplicationForm(event){
             body:formData
         });
 
-        const result = await response.json();
+       const text = await response.text();
+
+console.log(text);
+
+const result = JSON.parse(text);
 
         if(result.success){
 
@@ -373,7 +375,6 @@ async function submitApplicationForm(event){
 
 }
 
-}
 
 function showForm(event, type){
 

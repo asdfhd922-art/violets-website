@@ -330,18 +330,19 @@ async function submitApplicationForm(event){
 
     try{
 
-        const formData = new FormData(form);
+       const formData = new FormData(form);
 
-        const response = await fetch(applicationApiUrl,{
-            method:"POST",
-            body:formData
-        });
+const response = await fetch(applicationApiUrl,{
+    method:"POST",
+    mode:"no-cors",
+    body:formData
+});
 
-       const text = await response.text();
+       alert("✅ تم إرسال الطلب");
 
-console.log(text);
+form.reset();
 
-const result = JSON.parse(text);
+return;
 
         if(result.success){
 
